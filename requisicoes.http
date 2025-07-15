@@ -1,0 +1,22 @@
+GET http://localhost:3000/tarefa
+
+###
+POST http://localhost:3000/tarefa
+Content-Type: application/json
+
+{
+  "titulo": "Nova Tarefa",
+  "descricao": "Descrição da nova tarefa",
+  "status": "PENDENTE",
+  "usuarioId": 6
+}
+
+###
+POST http://localhost:3000/usuario
+Content-Type: application/json
+
+{
+  "nome": "Artur",
+  "email": "artur@gmail.com",
+  "senha": "senha123"
+}
