@@ -35,4 +35,39 @@ export class UsuarioService {
       where: { id },
     });
   }
+
+  async findTarefasByUsuario(id: number) {
+    return this.prismaService.tarefa.findMany({
+      where: { usuarioId: id },
+      select: {
+        id: true,
+        titulo: true,
+        descricao: true,
+        status: true,
+        criadoEm: true,
+      },
+      orderBy: {
+        criadoEm: 'desc',
+      },
+    });
+  }
+
+  async getEstatisticas(id: number) {
+    const tarefas = await this.prismaService.tarefa.findMany({
+      where: { usuarioId: id },
+      select: {
+        status: true,
+      },
+    });
+
+    const pendentes = tarefas.filter(
+      (t) => t.status === 'PENDENTE' || t.status === 'EM_ANDAMENTO',
+    ).length;
+    const concluidas = tarefas.filter((t) => t.status === 'CONCLUIDA').length;
+
+    return {
+      pendentes,
+      concluidas,
+    };
+  }
 }
