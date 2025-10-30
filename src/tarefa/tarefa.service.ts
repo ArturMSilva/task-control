@@ -13,8 +13,24 @@ export class TarefaService {
     });
   }
 
-  findAll() {
-    return this.prismaService.tarefa.findMany();
+  findAll(status?: string) {
+    const where = status ? { status: status as any } : {};
+
+    return this.prismaService.tarefa.findMany({
+      where,
+      include: {
+        usuario: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: {
+        criadoEm: 'desc',
+      },
+    });
   }
 
   findOne(id: number) {
@@ -33,6 +49,13 @@ export class TarefaService {
   remove(id: number) {
     return this.prismaService.tarefa.delete({
       where: { id },
+    });
+  }
+
+  async concluir(id: number) {
+    return this.prismaService.tarefa.update({
+      where: { id },
+      data: { status: 'CONCLUIDA' },
     });
   }
 }

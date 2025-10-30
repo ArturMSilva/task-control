@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { TarefaService } from './tarefa.service';
 import { CreateTarefaDto } from './dto/create-tarefa.dto';
 import { UpdateTarefaDto } from './dto/update-tarefa.dto';
@@ -14,8 +14,8 @@ export class TarefaController {
   }
 
   @Get()
-  findAll() {
-    return this.tarefaService.findAll();
+  findAll(@Query('status') status?: string) {
+    return this.tarefaService.findAll(status);
   }
 
   @Get(':id')
@@ -26,6 +26,11 @@ export class TarefaController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTarefaDto: UpdateTarefaDto) {
     return this.tarefaService.update(+id, updateTarefaDto);
+  }
+
+  @Patch(':id/concluir')
+  concluir(@Param('id') id: string) {
+    return this.tarefaService.concluir(+id);
   }
 
   @Delete(':id')
